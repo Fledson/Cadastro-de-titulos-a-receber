@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <!-- Se der certo ele chama esse alert, verifica ha mensagem e exibe ela  -->
+    <div class="alert alert-dark alert-dismissible fade show sucesso" role="alert" th:if="${!#strings.isEmpty(mensagem)}">
+        <span th:text="${mensagem}"></span>
+        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+</html>

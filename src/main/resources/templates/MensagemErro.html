@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <!-- Se der erro ele chama esse alert -->
+    <div class="alert error alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+        <!-- pegando a lista de erros -->
+        <div th:each="detailedError : ${#fields.detailedErrors()}">
+            <!-- pegando a mensagem do erros -->
+            <span th:text="${detailedError.message}"></span>
+        </div>
+    </div>
+
+</html>

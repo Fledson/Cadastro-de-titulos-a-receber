@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{LayoutPadrao}"
+>
+
+<head>
+    <title>Cadastro de título</title>
+</head>
+
+<body>
+
+    <section layout:fragment="conteudo">
+        <div th:replace="MensagemGeral"></div>
+        <div class="container-sm container-md container-lg container-xl body panel panel-default">
+
+
+            <div class="header-painel">
+                <h5 class="header-title">Novo Titulo</h5>
+                <a th:href="@{/titulos}">Voltar para pesquisa</a>
+            </div>
+
+            <div class="body-painel">
+                <form method="POST" th:action="@{/titulos}" th:object="${titulo}">
+                <div th:replace="MensagemErro"></div>
+
+                    <div class="panel-body">
+
+                        <!--
+                            Aqui, quando o titulo já tiver um codigo o thymeleaf quando receber o titulo e for salvar
+                            verifica que já há um codigo no tituto e só vai dar um update nele
+                         -->
+                        <input type="hidden" th:field="*{codigo}">
+
+                        <div class="form-group input" th:classappend="${#fields.hasErrors('descricao')} ? 'invalido' ">
+                            <label for="descricao" class="col-sm-3 control-label">Descrição</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="descricao" th:field="*{descricao}" placeholder="Digite aqui a descrição do titulo" />
+                            </div>
+                        </div>
+
+                        <div class="form-group input" th:classappend="${#fields.hasErrors('dataVencimento')} ? 'invalido'">
+                            <label for="dataVencimento" class="col-sm-3 control-label" >Data de vencimento</label>
+                            <div class="col-sm-4">
+                                <!-- usando propriedades do bootstrap datapicker -->
+                                <input type="text" class="form-control"	id="dataVencimento" th:field="*{dataVencimento}"
+                                       data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+                                       data-date-autoclose="true" data-date-today-highlight="true" data-date-orientation="bottom"
+                                       placeholder="Dia/Mês/Ano"
+                                />
+                            </div>
+                        </div>
+
+                        <div class="form-group input" th:classappend="${#fields.hasErrors('valor')} ? 'invalido'">
+                            <label for="valor" class="col-sm-3 control-label" >Valor</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control js-currency"  id="valor" th:field="*{valor}" placeholder="R$ 0,00"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group input">
+                            <label for="status" class="col-sm-3 control-label">Status</label>
+                            <div class="col-sm-4">
+                                <select class="form-control"  id="status" name="status" th:field="*{status}">
+                                    <option th:each="status : ${todosStatusTitulo}" th:value="${status}" th:text="${status.descricao} " ></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10 ">
+                                <button type="submit" class="btn btn-primary ">Salvar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

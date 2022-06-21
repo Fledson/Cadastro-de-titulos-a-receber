@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{LayoutPadrao}">
+<head>
+    <title>Pesquisa Titulo</title>
+</head>
+
+<body>
+
+    <section layout:fragment="conteudo">
+        <div th:replace="MensagemGeral"></div>
+        <div class="container-sm container-md container-lg container-xl body panel panel-default">
+
+            <div class="header-painel">
+                <h5 class="header-title">Pesquisa Titulos</h5>
+                <a th:href="@{/titulos/novo}">Cadastrar Titulo</a>
+            </div>
+
+            <div class="body-painel table-responsive-sm">
+                
+                <form method="GET" th:action="@{/titulos}" th:object="${filtro}">
+                    <div class="form-row align-items-center" >
+                      <div class="col-auto col-sm-5" >
+                        <label class="sr-only" for="inlineFormInputGroup">titulo</label>
+                        <div class="input-group mb-2 buttom-group " >
+                          <input type="text" class="form-control" id="inlineFormInputGroup" 
+                          placeholder="Pesquise aqui o titulo" autofocus th:field="*{descricao}">
+                          <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary">
+                                <i class="uil uil-search"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+
+                <table class="table table-striped table-hover table-responsive-sm table-borderless">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Descrição</th>
+                        <th>Data de Vencimento</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-secondary">
+                    <!-- percorrendo a lista de titulos e trazendo todos -->
+                    <tr th:each="titulo : ${titulos}" th:value="${titulos}">
+                        <th th:text="${titulo.codigo}"></th>
+                        <th th:text="${titulo.descricao}"></th>
+                        <!-- colocando {{}} para adicionar a formatação feira no model -->
+                        <th th:text="${{titulo.dataVencimento}}"></th>
+                        <th th:text="|R$ ${{titulo.valor}}|"></th>
+                        <!-- adicionando um baged -->
+                        <th >
+                            <!-- Colocando uma condição para selecionar a classe -->
+                            <span th:text="${titulo.status.descricao}" class="badge" th:id="${titulo.codigo}+-badge"
+                            th:classappend="${ titulo.pendente ? 'badge-danger' : 'badge-success' }" ></span></th>
+                        <th>
+                            <div class="icons">
+                                <a th:href="@{/titulos/{codigo}(codigo=${titulo.codigo})}" title="Editar" rel="tooltip" data-placement="top">
+                                    <i class="uil uil-edit"></i>
+                                </a>
+                                <a href="#" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+                                   th:attr="data-codigo=${titulo.codigo}, data-descricao=${titulo.descricao}"
+                                   rel="tooltip" data-placement="top" title="Excluir"
+                                >
+                                    <i class="uil uil-trash-alt"></i>
+                                </a>
+                                <a 
+                                    class="js-atualizar-status"
+                                    th:href="@{/titulos/{codigo}/receber(codigo=${titulo.codigo})}"  th:if="${titulo.pendente}"
+                                    th:attr="data-codigo=${titulo.codigo}"
+                                    rel="tooltip" data-placement="top" title="Receber"
+                                >
+                                    <i class="uil uil-check-circle"></i>
+                                </a>
+                            </div>
+                        </th>
+                    </tr>
+                    <tr>
+                        <!-- verificando se a lista é vazia, se for mostra esse registro -->
+                        <td colspan="6" th:if="${#lists.isEmpty(titulos)}">Nenhum titulo encontrado</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <!-- Chama modal -->
+        <div th:replace="DialogoConfirmacaoExclusao"></div>
+
+    </section>
+</body>
+</html>
